@@ -2,9 +2,17 @@
 
 import { useState } from 'react';
 import { motion } from 'framer-motion';
+// @ts-ignore
+import useWeb3Forms from '@web3forms/react';
+
+interface FormState {
+  name: string;
+  email: string;
+  message: string;
+}
 
 export default function ContactSection() {
-  const [formState, setFormState] = useState({
+  const [formState, setFormState] = useState<FormState>({
     name: '',
     email: '',
     message: '',
@@ -12,6 +20,27 @@ export default function ContactSection() {
   
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
+  
+  // Initialize Web3Forms
+  const { submit } = useWeb3Forms({
+    access_key: '5c9bb5de-b0ca-4f2d-9a87-54fb05e07ff7', // Replace with your actual Web3Forms access key
+    settings: {
+      from_name: 'Muhmd Samy Portfolio',
+      subject: 'New Contact Form Message from Portfolio',
+    },
+    onSuccess: (_: any, _data: any) => {
+      setIsSubmitted(true);
+      setFormState({ name: '', email: '', message: '' });
+      
+      setTimeout(() => {
+        setIsSubmitted(false);
+      }, 5000);
+    },
+    onError: (error: any, _data: any) => {
+      console.error('Error submitting form:', error);
+      setIsSubmitting(false);
+    }
+  });
   
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
@@ -23,27 +52,10 @@ export default function ContactSection() {
     setIsSubmitting(true);
     
     try {
-      const response = await fetch('/api/contact', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formState),
-      });
-
-      if (!response.ok) {
-        throw new Error('Failed to send message');
-      }
-
-      setIsSubmitted(true);
-      setFormState({ name: '', email: '', message: '' });
-      
-      setTimeout(() => {
-        setIsSubmitted(false);
-      }, 5000);
+      // Submit the form using Web3Forms
+      await submit(formState);
     } catch (error) {
       console.error('Error sending message:', error);
-      // You might want to show an error message to the user here
     } finally {
       setIsSubmitting(false);
     }
