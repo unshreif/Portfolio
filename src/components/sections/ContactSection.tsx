@@ -2,60 +2,51 @@
 
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-// @ts-ignore
-import useWeb3Forms from '@web3forms/react';
-
-interface FormState {
-  name: string;
-  email: string;
-  message: string;
-}
 
 export default function ContactSection() {
-  const [formState, setFormState] = useState<FormState>({
-    name: '',
-    email: '',
-    message: '',
-  });
-  
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
   
-  // Initialize Web3Forms
-  const { submit } = useWeb3Forms({
-    access_key: '5c9bb5de-b0ca-4f2d-9a87-54fb05e07ff7', // Replace with your actual Web3Forms access key
-    settings: {
-      from_name: 'Muhmd Samy Portfolio',
-      subject: 'New Contact Form Message from Portfolio',
-    },
-    onSuccess: (_: any, _data: any) => {
-      setIsSubmitted(true);
-      setFormState({ name: '', email: '', message: '' });
-      
-      setTimeout(() => {
-        setIsSubmitted(false);
-      }, 5000);
-    },
-    onError: (error: any, _data: any) => {
-      console.error('Error submitting form:', error);
-      setIsSubmitting(false);
-    }
-  });
-  
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const { name, value } = e.target;
-    setFormState((prev) => ({ ...prev, [name]: value }));
-  };
-  
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsSubmitting(true);
     
+    const formData = new FormData(e.currentTarget);
+    formData.append("access_key", "5abe2aee-e5e8-4551-afe3-1eee60d66a5c");
+    formData.append("from_name", "Muhmd Samy Portfolio");
+    formData.append("subject", "New Contact Form Message from Portfolio");
+    formData.append("botcheck", formData.get("botcheck") || "");
+    
     try {
-      // Submit the form using Web3Forms
-      await submit(formState);
+      const response = await fetch("https://api.web3forms.com/submit", {
+        method: "POST",
+        body: formData
+      });
+      
+      const data = await response.json();
+      
+      if (data.success) {
+        setIsSubmitted(true);
+        // Reset form
+        (e.target as HTMLFormElement).reset();
+        
+        setTimeout(() => {
+          setIsSubmitted(false);
+        }, 5000);
+      } else {
+        console.error('Form submission failed:', data);
+        if (data.errors) {
+          const errorDetails = Object.entries(data.errors)
+            .map(([field, message]) => `${field}: ${message}`)
+            .join('\n');
+          alert(`Validation errors:\n${errorDetails}`);
+        } else {
+          alert(`Error: ${data.message || 'Failed to submit form'}`);
+        }
+      }
     } catch (error) {
       console.error('Error sending message:', error);
+      alert(`Failed to send message: ${error instanceof Error ? error.message : 'Unknown error'}`);
     } finally {
       setIsSubmitting(false);
     }
@@ -182,6 +173,8 @@ export default function ContactSection() {
               </motion.div>
             ) : (
               <form onSubmit={handleSubmit}>
+                <input type="hidden" name="botcheck" />
+                <input type="checkbox" name="botcheck" className="hidden" style={{ display: 'none' }} />
                 <h3 className="text-xl font-bold mb-6">Send a Message</h3>
                 
                 <div className="mb-4">
@@ -192,8 +185,6 @@ export default function ContactSection() {
                     type="text"
                     id="name"
                     name="name"
-                    value={formState.name}
-                    onChange={handleChange}
                     required
                     className="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 text-white"
                     placeholder="Muhmd"
@@ -208,8 +199,6 @@ export default function ContactSection() {
                     type="email"
                     id="email"
                     name="email"
-                    value={formState.email}
-                    onChange={handleChange}
                     required
                     className="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 text-white"
                     placeholder="Muhmd@example.com"
@@ -223,8 +212,6 @@ export default function ContactSection() {
                   <textarea
                     id="message"
                     name="message"
-                    value={formState.message}
-                    onChange={handleChange}
                     required
                     rows={5}
                     className="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 text-white resize-none"
@@ -250,4 +237,4 @@ export default function ContactSection() {
       </div>
     </section>
   );
-} 
+}
