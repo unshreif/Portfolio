@@ -67,32 +67,7 @@ export default function Footer() {
               <li><Link href="#projects" className="text-gray-400 hover:text-purple-500 transition-colors">Projects</Link></li>
               <li><Link href="#skills" className="text-gray-400 hover:text-purple-500 transition-colors">Skills</Link></li>
               <li><Link href="#contact" className="text-gray-400 hover:text-purple-500 transition-colors">Contact</Link></li>
-              <li><Link href="connect.muhmdsamy.me" className="text-gray-400 hover:text-purple-500 transition-colors">Connect</Link></li>
             </ul>
-          </motion.div>
-          
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.4 }}
-            viewport={{ once: true }}
-            className="md:text-right"
-          >
-            <h3 className="text-xl font-bold mb-4">Connect</h3>
-            <div className="flex space-x-4 md:justify-end">
-              {socialLinks.map((social) => (
-                <a
-                  key={social.name}
-                  href={social.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-gray-400 hover:text-purple-500 transition-colors"
-                  aria-label={social.name}
-                >
-                  {social.icon}
-                </a>
-              ))}
-            </div>
           </motion.div>
         </div>
         

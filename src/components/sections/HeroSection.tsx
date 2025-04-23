@@ -70,7 +70,7 @@ export default function HeroSection() {
             className="text-4xl md:text-6xl lg:text-7xl font-bold mb-6"
             variants={itemVariants}
           >
-            {'Welcome to My Portfolio'.split('').map((char, index) => (
+            {'Welcome to My Website'.split('').map((char, index) => (
               <span key={index} className="char inline-block">
                 {char === ' ' ? '\u00A0' : char}
               </span>

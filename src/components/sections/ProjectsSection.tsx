@@ -3,42 +3,70 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
 
-const projects = [
+const projectCategories = [
   {
-    id: 1,
-    title: 'interactive Dashboard',
-    description: 'a modern, fast dashboard using React with Next.js and Tailwind CSS. This project is ideal for managing and interactively analyzing data in real time.',
-    color: 'bg-purple-700',
-    tags: ['Next.js', 'React JS', 'GSAP', 'Tailwind CSS'],
-    link: '/coming-soon',
+    id: 'frontend',
+    name: 'Frontend',
+    projects: [
+      {
+        id: 1,
+        title: 'Modern E-commerce',
+        description: 'A sleek and responsive e-commerce interface built with React and Tailwind CSS, featuring smooth animations and intuitive user interactions.',
+        color: 'bg-purple-700',
+        tags: ['React', 'Tailwind CSS', 'Framer Motion', 'UI/UX'],
+        link: '/coming-soon',
+      },
+      {
+        id: 2,
+        title: 'Interactive Dashboard',
+        description: 'A dynamic admin dashboard with real-time data visualization, custom charts, and responsive design for optimal user experience.',
+        color: 'bg-blue-700',
+        tags: ['Next.js', 'TypeScript', 'Chart.js', 'UI Design'],
+        link: '/coming-soon',
+      },
+      {
+        id: 3,
+        title: 'Personal Blog',
+        description: 'fast-loading, SEO-friendly blog using tools like Next.js combined with Markdown for streamlined content creation and management.',
+        color: 'bg-indigo-700',
+        tags: ['Next.js', 'Three.js', 'GSAP', 'UI/UX'],
+        link: '/coming-soon',
+      },
+    ],
   },
   {
-    id: 2,
-    title: 'E-commerce Website',
-    description: 'an integrated e-commerce platform using TypeScript, featuring a dynamic search system and responsive design for a seamless shopping experience.',
-    color: 'bg-blue-700',
-    tags: ['React', 'TypeScript', 'Tailwind CSS', 'GSAP'],
-    link: '/coming-soon',
-  },
-  {
-    id: 3,
-    title: 'Personal Blog',
-    description: 'fast-loading, SEO-friendly blog using tools like Next.js combined with Markdown for streamlined content creation and management.',
-    color: 'bg-indigo-700',
-    tags: ['Next.js', 'React JS', 'Typescript', 'Tailwind CSS'],
-    link: '/coming-soon',
-  },
-  {
-    id: 4,
-    title: 'Chat APP',
-    description: 'a responsive chat or messaging app using React along with WebSocket and Socket.IO to enable fast, real-time communication between users.',
-    color: 'bg-violet-700',
-    tags: ['React', 'Node.js', 'Socket.io', 'MongoDB'],
-    link: '/coming-soon',
+    id: 'uiux',
+    name: 'UI/UX',
+    projects: [
+      {
+        id: 4,
+        title: 'Banking App Redesign',
+        description: 'A complete redesign of a banking application focusing on user experience, accessibility, and modern design principles.',
+        color: 'bg-emerald-700',
+        tags: ['UI/UX', 'Figma', 'User Research', 'Wireframing'],
+        link: '/coming-soon',
+      },
+      {
+        id: 5,
+        title: 'Travel App Interface',
+        description: 'An intuitive travel application interface with user-centered design, interactive maps, and seamless booking experience.',
+        color: 'bg-rose-700',
+        tags: ['UI Design', 'Prototyping', 'User Testing', 'Figma'],
+        link: '/coming-soon',
+      },
+      {
+        id: 6,
+        title: 'Mobile App UI Kit',
+        description: 'A comprehensive UI kit for mobile applications, featuring custom components, animations, and design system documentation.',
+        color: 'bg-violet-700',
+        tags: ['Figma', 'UI Design', 'Prototyping', 'Design System'],
+        link: '/coming-soon',
+      },
+    ],
   },
 ];
 
-const ProjectCard = ({ project, index }: { project: typeof projects[0], index: number }) => {
+const ProjectCard = ({ project, index }: { project: typeof projectCategories[0]['projects'][0], index: number }) => {
   const [isHovered, setIsHovered] = useState(false);
 
   return (
@@ -105,6 +133,8 @@ const ProjectCard = ({ project, index }: { project: typeof projects[0], index: n
 };
 
 export default function ProjectsSection() {
+  const [activeCategory, setActiveCategory] = useState('frontend');
+
   return (
     <section id="projects" className="py-20 bg-black text-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -123,11 +153,29 @@ export default function ProjectsSection() {
             using cutting-edge web technologies.
           </p>
         </motion.div>
+
+        <div className="flex flex-wrap justify-center mb-10 space-x-2">
+          {projectCategories.map((category) => (
+            <button
+              key={category.id}
+              onClick={() => setActiveCategory(category.id)}
+              className={`px-6 py-2 rounded-full text-sm font-medium transition-colors duration-300 mb-2 ${
+                activeCategory === category.id
+                  ? 'bg-purple-600 text-white'
+                  : 'bg-gray-800 text-gray-300 hover:bg-gray-700'
+              }`}
+            >
+              {category.name}
+            </button>
+          ))}
+        </div>
         
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-8">
-          {projects.map((project, index) => (
-            <ProjectCard key={project.id} project={project} index={index} />
-          ))}
+          {projectCategories
+            .find((category) => category.id === activeCategory)
+            ?.projects.map((project, index) => (
+              <ProjectCard key={project.id} project={project} index={index} />
+            ))}
         </div>
         
         <motion.div
