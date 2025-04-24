@@ -1,15 +1,20 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { motion } from 'framer-motion';
 import gsap from 'gsap';
 import HeroScene from '../3d/HeroScene';
 
 export default function HeroSection() {
   const textRef = useRef<HTMLHeadingElement>(null);
+  const [isMounted, setIsMounted] = useState(false);
 
   useEffect(() => {
-    if (textRef.current) {
+    setIsMounted(true);
+  }, []);
+
+  useEffect(() => {
+    if (isMounted && textRef.current) {
       const chars = textRef.current.querySelectorAll('.char');
       
       gsap.fromTo(
@@ -29,7 +34,7 @@ export default function HeroSection() {
         }
       );
     }
-  }, []);
+  }, [isMounted]);
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -51,11 +56,15 @@ export default function HeroSection() {
     },
   };
 
+  if (!isMounted) {
+    return null;
+  }
+
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-black text-white">
       <div className="absolute inset-0 z-0">
         <div className="absolute inset-0 bg-gradient-to-b from-black via-transparent to-black opacity-80 z-10" />
-        <HeroScene />
+        {isMounted && <HeroScene />}
       </div>
       
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 z-20 relative">

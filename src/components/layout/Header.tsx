@@ -16,8 +16,14 @@ const navigation = [
 
 export default function Header() {
   const [scrolled, setScrolled] = useState(false);
+  // Add state to track if component is mounted (client-side)
+  const [isMounted, setIsMounted] = useState(false);
 
   useEffect(() => {
+    // Mark component as mounted on client-side
+    setIsMounted(true);
+    
+    // Only add event listeners if we're on the client side
     const handleScroll = () => {
       const isScrolled = window.scrollY > 10;
       if (isScrolled !== scrolled) {
@@ -25,10 +31,16 @@ export default function Header() {
       }
     };
 
-    document.addEventListener('scroll', handleScroll);
-    return () => {
-      document.removeEventListener('scroll', handleScroll);
-    };
+    // Check if window is available before adding event listeners
+    if (typeof window !== 'undefined') {
+      // Initial check for scroll position
+      handleScroll();
+      
+      document.addEventListener('scroll', handleScroll);
+      return () => {
+        document.removeEventListener('scroll', handleScroll);
+      };
+    }
   }, [scrolled]);
 
   return (
@@ -106,4 +118,4 @@ export default function Header() {
       )}
     </Disclosure>
   );
-} 
+}

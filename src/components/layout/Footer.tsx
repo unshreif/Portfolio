@@ -1,5 +1,6 @@
 'use client';
 
+import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
 
@@ -34,7 +35,13 @@ const socialLinks = [
 ];
 
 export default function Footer() {
-  const currentYear = new Date().getFullYear();
+  // Using useState and useEffect to handle client-side date rendering
+  const [currentYear, setCurrentYear] = useState(2024); // Default fallback year
+  
+  useEffect(() => {
+    // Update the year on the client side only
+    setCurrentYear(new Date().getFullYear());
+  }, []);
   
   return (
     <footer className="bg-black text-white py-12">
@@ -69,6 +76,30 @@ export default function Footer() {
               <li><Link href="#contact" className="text-gray-400 hover:text-purple-500 transition-colors">Contact</Link></li>
             </ul>
           </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.4 }}
+            viewport={{ once: true }}
+            className="md:text-right"
+          >
+            <h3 className="text-xl font-bold mb-4">Connect</h3>
+            <div className="flex space-x-4 md:justify-end">
+              {socialLinks.map((link) => (
+                <a
+                  key={link.name}
+                  href={link.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-gray-400 hover:text-purple-500 transition-colors"
+                  aria-label={link.name}
+                >
+                  {link.icon}
+                </a>
+              ))}
+            </div>
+          </motion.div>
         </div>
         
         <div className="mt-8 pt-8 border-t border-gray-800 text-center">
@@ -79,4 +110,4 @@ export default function Footer() {
       </div>
     </footer>
   );
-} 
+}

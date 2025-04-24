@@ -1,6 +1,6 @@
 'use client';
 
-import { useRef } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import * as THREE from 'three';
 import { Canvas, useFrame } from '@react-three/fiber';
 import { OrbitControls, Sphere, MeshDistortMaterial } from '@react-three/drei';
@@ -37,10 +37,25 @@ export default function HeroScene() {
     threshold: 0.1,
   });
 
+  // Add state to track if component is mounted (client-side)
+  const [isMounted, setIsMounted] = useState(false);
+
+  // Only render Three.js content on the client side
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
   const canvasVariants = {
     hidden: { opacity: 0 },
     visible: { opacity: 1, transition: { duration: 1.5, ease: [0.6, 0.05, 0.01, 0.9] } }
   };
+
+  // Return a placeholder with the same dimensions during server rendering
+  if (!isMounted) {
+    return (
+      <div className="w-full h-[500px] md:h-[600px] lg:h-[700px] bg-black" />
+    );
+  }
 
   return (
     <motion.div 

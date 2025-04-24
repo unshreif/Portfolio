@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 
 const skillCategories = [
@@ -22,10 +22,10 @@ const skillCategories = [
     skills: [
       { name: 'Node.js', level: 85 },
       { name: 'Express.js', level: 83 },
-      { name: 'GraphQL', level: 80 },
+      { name: 'GraphQL', level: 60 },
       { name: 'REST APIs', level: 90 },
-      { name: 'MongoDB', level: 75 },
-      { name: 'PostgreSQL', level: 70 },
+      { name: 'MongoDB', level: 40 },
+      { name: 'PostgreSQL', level: 30 },
     ],
   },
   {
@@ -47,7 +47,7 @@ const skillCategories = [
       { name: 'Python', level: 95 },
       { name: 'C++', level: 84 },
       { name: 'Problem Solving', level: 90 },
-      { name: 'DevOps', level: 80 },
+      { name: 'DevOps', level: 50 },
       { name: 'Performance Optimization', level: 85 },
     ],
   },
@@ -75,6 +75,11 @@ const SkillBar = ({ skill, index }: { skill: { name: string; level: number }, in
 
 export default function SkillsSection() {
   const [activeCategory, setActiveCategory] = useState('frontend');
+  const [isMounted, setIsMounted] = useState(false);
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
 
   const fadeInUpVariants = {
     hidden: { opacity: 0, y: 20 },
@@ -84,6 +89,10 @@ export default function SkillsSection() {
       transition: { duration: 0.6 }
     },
   };
+
+  if (!isMounted) {
+    return null; // Return null on server-side to prevent hydration mismatch
+  }
 
   return (
     <section id="skills" className="py-20 bg-gray-900 text-white">
@@ -153,4 +162,4 @@ export default function SkillsSection() {
       </div>
     </section>
   );
-} 
+}
