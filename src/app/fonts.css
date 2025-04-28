@@ -1,7 +1,5 @@
-
-/* Import fonts from CDN */
-@import url('https://cdn.example.com/geist-sans.css'); /* Replace with actual CDN URL */
-@import url('https://cdn.example.com/geist-mono.css'); /* Replace with actual CDN URL */
+/* No need to import from placeholder CDNs as we're using Next.js font system */
+/* The Geist fonts are properly imported in the layout.tsx file */
 
 /* Define CSS variables for the fonts */
 :root {

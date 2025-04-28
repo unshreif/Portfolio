@@ -49,15 +49,15 @@ export default function ComingSoon() {
             >
               Back to Home
             </Link>
-            <a
-              href="#contact"
+            <Link
+              href="/#contact"
               className="px-6 py-3 border border-purple-600 hover:bg-purple-600/10 rounded-full transition-colors duration-300"
             >
               Contact Us
-            </a>
+            </Link>
           </div>
         </motion.div>
       </div>
     </div>
   );
-} 
+}

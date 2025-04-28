@@ -10,7 +10,7 @@ const certifications = [
     issueDate: 'September 2024',
     expiryDate: 'No Expiration',
     credentialId: 'uzqZBGud',
-    verificationUrl: ' https://scrimba.com/certificate/uzqZBGud/gfrontend',
+    verificationUrl: 'https://scrimba.com/certificate/uzqZBGud/gfrontend',
   },
   {
     id: 2,
@@ -19,7 +19,7 @@ const certifications = [
     issueDate: 'october 2024',
     expiryDate: 'No Expiration',
     credentialId: '4T6YZ0MBT7RJ',
-    verificationUrl: 'https://cour sera.org/ver ify/4T6YZ0MBT7RJ',
+    verificationUrl: 'https://coursera.org/verify/4T6YZ0MBT7RJ',
   },
   {
     id: 3,
