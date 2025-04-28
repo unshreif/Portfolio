@@ -1,15 +1,9 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 
 export default function SecurityScript() {
-  // Add state to track if component is mounted (client-side)
-  const [isMounted, setIsMounted] = useState(false);
-
   useEffect(() => {
-    // Mark component as mounted on client-side
-    setIsMounted(true);
-    
     // Only add event listeners on the client side
     const preventDefault = (e: Event) => e.preventDefault();
     const preventKeyDown = (e: KeyboardEvent) => {
